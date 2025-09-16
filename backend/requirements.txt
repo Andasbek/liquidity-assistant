@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic
+pandas
+numpy
+prophet            # или pmdarima, выберите один baseline
+pmdarima
+scikit-learn
+matplotlib
+reportlab          # pdf-генерация (или weasyprint)
+jinja2             # шаблоны отчётов
+python-dotenv
+python-multipart
+httpx
+pyarrow

@@ -1,0 +1,19 @@
+# infra/docker-compose.yml
+version: "3.9"
+services:
+  backend:
+    build: ../backend
+    ports: ["8000:8000"]
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LLM_PROVIDER=ollama
+      - LLM_MODEL=llama3.1
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    volumes:
+      - ../data:/app/data
+  frontend:
+    build: ../frontend
+    ports: ["8501:8501"]
+    environment:
+      - API_URL=http://backend:8000/api
+    depends_on: [backend]

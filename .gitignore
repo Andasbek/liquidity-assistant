@@ -1,0 +1,107 @@
+# -----------------------
+# OS / Editor junk
+# -----------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# -----------------------
+# Python
+# -----------------------
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+*.egg
+*.egg-info/
+.eggs/
+.dist-info/
+build/
+dist/
+pip-wheel-metadata/
+.python-version        # pyenv
+.venv/
+venv/
+backend/venv/
+frontend/.venv/
+
+# Caches
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+
+# -----------------------
+# Environment / Secrets
+# -----------------------
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+**/secrets*.json
+**/secrets*.yml
+**/secrets*.yaml
+# Streamlit local secrets/creds
+.streamlit/secrets.toml
+.streamlit/credentials.toml
+
+# -----------------------
+# Project data & artifacts
+# -----------------------
+# ETL outputs and logs (keep samples separately)
+data/processed/**
+data/logs/**
+data/tmp/**
+# allow keepers/readme in data/
+!data/.gitkeep
+!data/README.md
+# keep sample CSVs if you add them
+!data/samples/**
+!data/samples/**/*.csv
+
+# Reports (generated)
+reports/output/**
+reports/*.pdf
+reports/*.html
+
+# Model / forecast artifacts (if any)
+**/artifacts/**
+**/checkpoints/**
+
+# -----------------------
+# Frontend (Streamlit)
+# -----------------------
+# Streamlit sometimes caches in .streamlit/
+.streamlit/**
+
+# -----------------------
+# Docker / Compose
+# -----------------------
+infra/.env
+infra/*.env
+infra/*-override.yml
+# Docker build leftovers
+**/.dockerignore~
+**/.docker-build/
+
+# -----------------------
+# Misc
+# -----------------------
+*.log
+logs/**
+tmp/**
+temp/**

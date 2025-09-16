@@ -1,0 +1,18 @@
+date,type,currency,amount,memo
+2025-07-15,inflow,KZT,5000000,Client invoice payment
+2025-07-22,inflow,KZT,5000000,Client invoice payment
+2025-07-29,inflow,KZT,5000000,Client invoice payment
+2025-08-05,inflow,KZT,5000000,Client invoice payment
+2025-08-12,inflow,KZT,5000000,Client invoice payment
+2025-08-19,inflow,KZT,5000000,Client invoice payment
+2025-08-26,inflow,KZT,5000000,Client invoice payment
+2025-09-02,inflow,KZT,5000000,Client invoice payment
+2025-09-09,inflow,KZT,5000000,Client invoice payment
+2025-07-15,outflow,KZT,6500000,Salaries & payroll
+2025-07-29,outflow,KZT,6500000,Salaries & payroll
+2025-08-12,outflow,KZT,6500000,Salaries & payroll
+2025-08-26,outflow,KZT,6500000,Salaries & payroll
+2025-09-09,outflow,KZT,6500000,Salaries & payroll
+2025-07-20,outflow,USD,20000,Import payment (USD)
+2025-08-10,outflow,USD,20000,Import payment (USD)
+2025-08-31,outflow,USD,20000,Import payment (USD)
