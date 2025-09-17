@@ -10,3 +10,5 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")             # токен, ес�
 
 # Таймауты / параметры
 LLM_TIMEOUT = int(os.getenv("LLM_TIMEOUT", "60"))
+
+SYNC_EVERY_MIN = int(os.getenv("SYNC_EVERY_MIN", "0"))  # 0 = выключено; иначе каждые N минут

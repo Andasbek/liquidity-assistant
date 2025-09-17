@@ -147,8 +147,11 @@ with colF1:
 with colF2:
     if st.session_state["baseline_resp"]:
         m = st.session_state["baseline_resp"].get("metrics", {})
-        st.subheader("Метрики качества (черновые)")
-        st.write({k: round(v, 3) for k, v in m.items()})
+        # st.subheader("Метрики качества (черновые)")
+        st.subheader("Метрики качества")
+        st.write({k: str(round(v, 3)) + "%" for k, v in m.items()})
+        print(m)
+        
 
 # ---- Scenario Section ----
 st.header("2) Сценарии 'what-if'")

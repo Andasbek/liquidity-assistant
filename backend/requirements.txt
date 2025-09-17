@@ -13,3 +13,4 @@ python-dotenv
 python-multipart
 httpx
 pyarrow
+APScheduler
