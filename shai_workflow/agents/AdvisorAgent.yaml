@@ -1,0 +1,20 @@
+name: AdvisorAgent
+role: "CFO Brief"
+description: "Формирует совет и действия на основе baseline/scenario"
+inputs:
+  API_BASE: string
+  baseline: object
+  scenario: object
+  role: string
+run:
+  http:
+    method: POST
+    url: ${{ inputs.API_BASE }}/advice
+    headers:
+      Content-Type: application/json
+      X-Role: ${{ inputs.role }}
+    body:
+      baseline: ${{ inputs.baseline }}
+      scenario: ${{ inputs.scenario }}
+outputs:
+  result: ${{ run.response.body }}

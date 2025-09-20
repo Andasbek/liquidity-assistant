@@ -1,19 +1,23 @@
-from fastapi import APIRouter, HTTPException
+# backend/app/routers/advice.py
+from fastapi import APIRouter, Depends
+from ..core.auth import require_any
 from ..models.schemas import AdviceRequest, AdviceResponse
-from ..services import advisor
-from ..utils.io import load_df
+from ..services.advisor import build_advice
 
-router = APIRouter(tags=["advice"])
+router = APIRouter(tags=["advice"])  # без prefix="/api" — он в main.py
 
-@router.post("/advice", response_model=AdviceResponse)
-def get_advice(req: AdviceRequest):
-    # daily нужен для понимания текущего кэша и волатильности
-    try:
-        daily = load_df("daily_cash.parquet")
-    except FileNotFoundError:
-        raise HTTPException(400, detail="Upload data first via /upload")
-
-    text, actions = advisor.make_advice(
-        baseline=req.baseline, scenario=req.scenario, daily=daily
-    )
-    return AdviceResponse(advice_text=text, actions=actions)
+@router.post(
+    "/advice",
+    response_model=AdviceResponse,
+    dependencies=[Depends(require_any("CFO", "Treasurer"))],
+)
+def advice_api(payload: AdviceRequest):
+    """
+    Принимает:
+      {
+        "baseline": { "forecast": [...], "metrics": {...}, ... },
+        "scenario": { "forecast_scenario": [...], "min_cash": ..., ... }
+      }
+    Возвращает AdviceResponse с текстом брифа и actions.
+    """
+    return build_advice(payload)

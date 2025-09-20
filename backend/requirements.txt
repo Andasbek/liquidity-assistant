@@ -14,3 +14,4 @@ python-multipart
 httpx
 pyarrow
 APScheduler
+reportlab>=4.0.9

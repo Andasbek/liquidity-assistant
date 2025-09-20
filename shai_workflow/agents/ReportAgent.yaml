@@ -1,0 +1,21 @@
+name: ReportAgent
+role: "Reporting"
+description: "Генерирует PDF и отдаёт base64"
+inputs:
+  API_BASE: string
+  payload: object
+  role: string
+run:
+  http:
+    method: POST
+    url: ${{ inputs.API_BASE }}/report/pdf
+    headers:
+      Content-Type: application/json
+      X-Role: ${{ inputs.role }}
+    body: ${{ inputs.payload }}
+  transform:
+    # превращаем бинарный PDF-ответ в base64 (зависит от раннера; примерный оператор)
+    pdf_base64: ${{ base64(run.response.body) }}
+outputs:
+  result:
+    pdf_base64: ${{ run.transform.pdf_base64 }}

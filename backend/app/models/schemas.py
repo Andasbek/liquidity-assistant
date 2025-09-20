@@ -1,39 +1,51 @@
-from pydantic import BaseModel, Field, conint, ConfigDict
-from typing import List, Dict, Any, Optional
+from pydantic import BaseModel, Field, conint, confloat
+from datetime import date
+from typing import List, Optional, Literal, Dict, Any
+
+ScenarioName = Literal["baseline","stress","optimistic"]
+
+class UploadResult(BaseModel):
+    loaded: Dict[str, int]
 
 class ForecastRequest(BaseModel):
-    horizon_days: conint(ge=1, le=60) = 14
+    horizon_days: conint(ge=1, le=60) = 35
+    scenario: ScenarioName = "baseline"
 
 class ForecastPoint(BaseModel):
-    date: str
+    date: date
     net_cash: float
     cash_balance: float
 
 class ForecastResponse(BaseModel):
     forecast: List[ForecastPoint]
-    metrics: Dict[str, float]
+    metrics: Optional[Dict[str, float]] = None
+    scenario: ScenarioName = "baseline"
 
 class ScenarioRequest(BaseModel):
-    horizon_days: conint(ge=1, le=60) = 14
-    fx_shock: float = 0.0                        # +0.1 = USD +10%
-    delay_top_inflow_days: int = 0               # задержка крупнейшего поступления
-    delay_top_outflow_days: int = 0              # задержка крупнейшей выплаты
+    horizon_days: conint(ge=1, le=60) = 35
+    scenario: ScenarioName = "baseline"
+    fx_shock: confloat(ge=-0.5, le=0.5) = 0.0
+    delay_top_inflow_days: conint(ge=0, le=30) = 0
+    delay_top_outflow_days: conint(ge=0, le=30) = 0
+    shift_purchases_days: conint(ge=0, le=30) = 0
 
 class ScenarioResponse(BaseModel):
+    run_id: str
+    scenario: ScenarioName
     forecast_scenario: List[ForecastPoint]
-    min_cash: Optional[float] = None
-    metrics: Dict[str, float]
+    min_cash: float
+    metrics: Optional[Dict[str, float]] = None
 
-class AdviceRequest(BaseModel):
-    baseline: Dict[str, Any] = Field(..., description="Выход /forecast")
-    scenario: Dict[str, Any] = Field(..., description="Выход /scenario")
-
-class Action(BaseModel):
+class AdviceAction(BaseModel):
     title: str
     amount: Optional[float] = None
     rationale: Optional[str] = None
 
+class AdviceRequest(BaseModel):
+    baseline: ForecastResponse
+    scenario: ScenarioResponse
+
 class AdviceResponse(BaseModel):
-    model_config = ConfigDict(protected_namespaces=())
+    run_id: str
     advice_text: str
-    actions: List[Action]
+    actions: List[AdviceAction] = []

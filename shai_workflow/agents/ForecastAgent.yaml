@@ -1,0 +1,18 @@
+name: ForecastAgent
+role: "Forecast"
+description: "Считает базовый прогноз на горизонте"
+inputs:
+  API_BASE: string
+  horizon_days: integer
+  role: string
+run:
+  http:
+    method: POST
+    url: ${{ inputs.API_BASE }}/forecast
+    headers:
+      Content-Type: application/json
+      X-Role: ${{ inputs.role }}
+    body:
+      horizon_days: ${{ inputs.horizon_days }}
+outputs:
+  result: ${{ run.response.body }}

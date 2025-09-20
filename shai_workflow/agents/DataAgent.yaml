@@ -1,0 +1,25 @@
+name: DataAgent
+role: "ETL & Sources"
+description: "Подготовить данные для витрины: либо сидер демо, либо no-op."
+inputs:
+  API_BASE: string
+  seed_demo_data: boolean
+  role: string
+run:
+  when: ${{ inputs.seed_demo_data == true }}
+  http:
+    method: POST
+    url: ${{ inputs.API_BASE }}/dev/seed
+    headers:
+      Content-Type: application/json
+      X-Role: ${{ inputs.role }}
+    body: {}
+  else:
+    value:
+      loaded:
+        bank_statements.csv: 0
+        payment_calendar.csv: 0
+        fx_rates.csv: 0
+        daily_cash.parquet: 0
+outputs:
+  result: ${{ run.response.body | default(run.value) }}

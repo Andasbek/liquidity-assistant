@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import upload, forecast, scenario, advice, llm_test, dev_seed, sources  # ⬅️ добавили
+from .routers import upload, forecast, scenario, advice, llm_test, dev_seed, sources, reports, backtest
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
@@ -19,9 +19,11 @@ app.include_router(upload.router, prefix="/api")
 app.include_router(forecast.router, prefix="/api")
 app.include_router(scenario.router, prefix="/api")
 app.include_router(advice.router, prefix="/api")
-app.include_router(llm_test.router, prefix="/api")  # ⬅️ добавили
+app.include_router(llm_test.router, prefix="/api")
 app.include_router(dev_seed.router, prefix="/api")
 app.include_router(sources.router, prefix="/api")
+app.include_router(reports.router, prefix="/api")
+app.include_router(backtest.router, prefix="/api")
 
 @app.get("/api/health")
 def health():

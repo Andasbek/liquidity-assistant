@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8">
+<title>Liquidity Report T+35 — {{ as_of }}</title>
+<style>
+ body{font-family:system-ui,Arial;margin:24px;}
+ h1,h2{margin:0 0 8px;}
+ .kpis{display:flex;gap:12px;margin:12px 0;}
+ .card{border:1px solid #e5e7eb;border-radius:10px;padding:12px;}
+ table{width:100%;border-collapse:collapse;margin-top:8px;}
+ th,td{border:1px solid #e5e7eb;padding:6px;text-align:right;}
+ th:first-child,td:first-child{text-align:left;}
+ .neg{color:#b91c1c;font-weight:600;}
+</style></head><body>
+<h1>Liquidity Report T+35</h1>
+<p><b>As of:</b> {{ as_of }} • <b>Scenario:</b> {{ scenario|capitalize }}</p>
+
+<div class="kpis">
+  <div class="card"><div>MAPE @T+35</div><h2>{{ mape|round(2) }}%</h2></div>
+  <div class="card"><div>Precision (gap)</div><h2>{{ precision_gap|round(2) }}</h2></div>
+  <div class="card"><div>Min Cash (base)</div><h2>{{ min_cash_base|round(0) }}</h2></div>
+  <div class="card"><div>Min Cash (scen)</div><h2 class="{{ 'neg' if min_cash_scen<0 else '' }}">{{ min_cash_scen|round(0) }}</h2></div>
+</div>
+
+<h2>Forecast</h2>
+<table>
+  <tr><th>Date</th><th>Net Cash</th><th>Balance</th></tr>
+  {% for p in forecast %}
+  <tr>
+    <td>{{ p.date }}</td>
+    <td>{{ "%.0f"|format(p.net_cash) }}</td>
+    <td class="{{ 'neg' if p.cash_balance<0 else '' }}">{{ "%.0f"|format(p.cash_balance) }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Recommendations</h2>
+<p>{{ advice_text }}</p>
+<ul>
+{% for a in actions %}
+  <li><b>{{ a.title }}</b>{% if a.amount %}: {{ "%.0f"|format(a.amount) }}{% endif %}{% if a.rationale %} — {{ a.rationale }}{% endif %}</li>
+{% endfor %}
+</ul>
+</body></html>

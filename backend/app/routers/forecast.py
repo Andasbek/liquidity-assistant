@@ -1,16 +1,18 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends
+from ..core.auth import require_any
 from ..models.schemas import ForecastRequest, ForecastResponse
-from ..services import forecast as svc_forecast
-from ..utils.io import load_df
+from ..services.forecast import get_forecast
 
-router = APIRouter(tags=["forecast"])
+router = APIRouter(tags=["forecast"])  # ← без prefix
 
-@router.post("/forecast", response_model=ForecastResponse)
-def make_forecast(req: ForecastRequest):
-    try:
-        daily = load_df("daily_cash.parquet")
-    except FileNotFoundError:
-        raise HTTPException(400, detail="Upload data first via /upload")
-
-    fcst, metrics = svc_forecast.forecast_cash(daily, req.horizon_days)
-    return ForecastResponse(forecast=fcst, metrics=metrics)
+@router.post(
+    "/forecast",
+    response_model=ForecastResponse,
+    dependencies=[Depends(require_any("CFO", "Treasurer", "Analyst"))],
+)
+def forecast_api(payload: ForecastRequest):
+    fcst, metrics = get_forecast(
+        horizon=payload.horizon_days,
+        scenario=payload.scenario or "baseline",
+    )
+    return ForecastResponse(forecast=fcst, metrics=metrics, scenario=payload.scenario or "baseline")

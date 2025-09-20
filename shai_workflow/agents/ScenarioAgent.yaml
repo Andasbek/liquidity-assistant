@@ -1,0 +1,26 @@
+name: ScenarioAgent
+role: "What-if"
+description: "Запускает сценарий FX/задержек"
+inputs:
+  API_BASE: string
+  horizon_days: integer
+  scenario: string
+  fx_shock: number
+  delay_top_inflow_days: integer
+  delay_top_outflow_days: integer
+  role: string
+run:
+  http:
+    method: POST
+    url: ${{ inputs.API_BASE }}/scenario
+    headers:
+      Content-Type: application/json
+      X-Role: ${{ inputs.role }}
+    body:
+      horizon_days: ${{ inputs.horizon_days }}
+      scenario: ${{ inputs.scenario }}
+      fx_shock: ${{ inputs.fx_shock }}
+      delay_top_inflow_days: ${{ inputs.delay_top_inflow_days }}
+      delay_top_outflow_days: ${{ inputs.delay_top_outflow_days }}
+outputs:
+  result: ${{ run.response.body }}

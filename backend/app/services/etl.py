@@ -1,6 +1,22 @@
 import pandas as pd
 import numpy as np
 from ..utils.io import load_df, path_exists
+from typing import Dict
+
+def normalize_many(files: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
+    """
+    Утилита: прогоняет normalize(name, df) по всем входным фреймам.
+    Ключи ожидаем как имена файлов: 'bank_statements.csv', 'payment_calendar.csv', 'fx_rates.csv'.
+    """
+    out = {}
+    for name, df in files.items():
+        out[name] = normalize(name, df)
+    # Для удобства — продублируем «короткие» ключи:
+    if "bank_statements.csv" in out: out["bank"] = out["bank_statements.csv"]
+    if "payment_calendar.csv" in out: out["paycal"] = out["payment_calendar.csv"]
+    if "fx_rates.csv" in out: out["fx"] = out["fx_rates.csv"]
+    return out
+
 
 def normalize(name: str, df: pd.DataFrame) -> pd.DataFrame:
     """Приводим CSV к ожидаемым схемам, лёгкая очистка."""
